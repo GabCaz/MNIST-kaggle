@@ -42,4 +42,3 @@ def prepare_split_cnn(x_train_df: pd.DataFrame, y_train_df: pd.DataFrame,
                                                       random_state=RANDOM_SEED)
 
     return x_train, x_val, y_train, y_val, x_test
-

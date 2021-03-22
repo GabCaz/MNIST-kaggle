@@ -9,6 +9,7 @@ import numpy as np
 from sklearn.metrics import confusion_matrix
 from cnn.prepare_data_cnn import prepare_split_cnn
 import itertools
+import pandas as pd
 
 # %%
 _RELOAD = False
@@ -101,7 +102,7 @@ sorted_dela_errors = np.argsort(delta_pred_true_errors)
 most_important_errors = sorted_dela_errors[-6:]
 
 
-#%%
+# %%
 def display_errors(errors_index, img_errors, pred_errors, obs_errors):
     """
     This function shows 6 images with their predicted and real labels
@@ -123,6 +124,17 @@ def display_errors(errors_index, img_errors, pred_errors, obs_errors):
             ax[row, col].set_title("Predicted label :{}\nTrue label :{}".format(pred_errors[error], obs_errors[error]))
             n += 1
 
+
 # Show the top 6 errors
 display_errors(most_important_errors, X_val_errors, Y_pred_classes_errors, Y_true_errors)
 plt.show()
+
+# %% Submission to Kaggle
+# predict results
+results = model.predict(test)
+# select the indices with the maximum probability
+results = np.argmax(results, axis=1)
+results = pd.Series(results, name="Label")
+submission = pd.concat([pd.Series(range(1, 28001), name="ImageId"), results], axis=1)
+
+submission.to_csv("cnn_mnist_datagen.csv", index=False)
