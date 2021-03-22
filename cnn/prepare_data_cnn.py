@@ -2,8 +2,7 @@
 Data Preparation Methods for the CNN
 """
 import pandas as pd
-from parameters import SIDE_LENGTH, PIXEL_SCALE, RANDOM_SEED, NUM_CLASSES
-from dataloader import X_train, Y_train, test
+from parameters import SIDE_LENGTH, PIXEL_SCALE, RANDOM_SEED, NUM_CLASSES, NUM_CHANNELS
 from keras.utils.np_utils import to_categorical  # convert to one-hot-encoding
 from sklearn.model_selection import train_test_split
 
@@ -16,8 +15,8 @@ def pre_process_features_for_cnn(data_df: pd.DataFrame):
     # Normalize data on scale [0, 1]
     data_df = data_df / PIXEL_SCALE
 
-    # Reshape image in 3 dimensions (height = 28px, width = 28px , canal = 1)
-    data_df = data_df.values.reshape(-1, SIDE_LENGTH, SIDE_LENGTH, 1)
+    # Reshape image in 3 dimensions (height: px, width: px , canal: num colors)
+    data_df = data_df.values.reshape(-1, SIDE_LENGTH, SIDE_LENGTH, NUM_CHANNELS)
     return data_df
 
 
@@ -43,3 +42,4 @@ def prepare_split_cnn(x_train_df: pd.DataFrame, y_train_df: pd.DataFrame,
                                                       random_state=RANDOM_SEED)
 
     return x_train, x_val, y_train, y_val, x_test
+
